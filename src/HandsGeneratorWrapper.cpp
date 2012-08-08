@@ -51,6 +51,10 @@ void HandsGenerator_StartTracking_wrapped(xn::HandsGenerator& self, BP::list poi
     check( self.StartTracking(convertToVec3D((boost::python::list) point)) );
 }
 
+void HandsGenerator_SetSmoothing_wrapped(xn::HandsGenerator& self, XnFloat fSmoothingFactor) {
+    check( self.SetSmoothing(fSmoothingFactor) );
+}
+
 /** Internal callback implementations **/
 void XN_CALLBACK_TYPE Create_callback(xn::HandsGenerator& src, XnUserID user, const XnPoint3D *pPosition, XnFloat fTime, void* cookie) {
     BP::object& func = ((BP::object*)cookie)[0];
