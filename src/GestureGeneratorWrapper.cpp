@@ -81,14 +81,21 @@ BP::list GestureGenerator_GetAvailableGestures(xn::GestureGenerator& self) {
     BP::list ret;
 
     if (gestures > 0) {
-        std::vector<XnChar*> result (gestures);
+        const XnUInt16 gestureNameBufferLength = 100; // pray that this is enough space per gesture name
 
-        check( self.EnumerateGestures(*((XnChar**)(result.data())), gestures) );
+        XnChar** buf = new XnChar*[gestures];
+        for (XnUInt16 i = 0; i < gestures; i++)
+            buf[i] = new XnChar[gestureNameBufferLength];
 
-        for (XnUInt16 i = 0; i < gestures; i++) {
-            XnChar* name = result.at(i);
-            if (name != NULL) ret.append(std::string(name));
-        }
+        check( self.EnumerateGestures(*buf, gestures) );
+
+        for (XnUInt16 i = 0; i < gestures; i++)
+            if (buf[i])
+                ret.append(std::string(buf[i]));
+
+        for (XnUInt16 i = 0; i < gestures; i++)
+            delete buf[i];
+        delete buf;
     }
     return ret;
 }
